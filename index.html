@@ -122,8 +122,8 @@
   {
     "@context": "https://schema.org",
     "@type": "ScholarlyArticle",
-    "headline": "PAPER_TITLE",
-    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "headline": "VisualScratchpad: Grounding Visual Concepts in Large Vision Language Models",
+    "description": "To make model internals more accessible and enable systematic debugging, we introduce VisualScratchpad, an interactive interface for visual concept analysis during inference.",
     "author": [
       {
         "@type": "Person",
@@ -305,20 +305,23 @@
           <div class="columns is-centered">
             <div class="column" style="max-width: 80%;">
               <!-- TLDR Section -->
-              <img src="static/images/overview_vspd.png"
+              <img src="static/images/method.png"
                 alt="VisualScratchpad: Grounding Visual Concepts in Large Vision Language Models"
                 style="width: 100%; max-width: 1200px; height: auto;" loading="lazy" />
               <!-- Caption style description -->
               <p class="teaser-caption"
                 style="text-align: left; padding: 1rem 0; margin: 1rem 0; font-size: 1.1rem; line-height: 1.5; color: #666;">
-                We introduce a concept-level analysis framework based on SAEs that decomposes the vision encoder's
-                internal representations into interpretable concepts. Combining it with attention maps from generated
-                tokens to visual tokens allows systematic analysis of the utilization of visual concepts. This enables
-                precise diagnosis of whether inaccurate answers originate from insufficient visual representation or
-                from incomplete cross-modal utilization. We also develop an interactive interface that supports
-                intuitive exploration of concept activations and attention trajectories across inputs. Finally, through
-                VQA case studies, we highlight structural failure modes in multimodal models and discuss how such
-                analyses can inform future efforts toward building more predictable and reliable multimodal systems.
+                To make vision-language model internals more accessible and enable systematic debugging, we introduce
+                <strong>VisualScratchpad</strong>, an interactive interface for visual concept analysis during
+                inference.
+                <strong>A.</strong> During inference in a vision-language model, we extract
+                the intermediate representation <strong>z</strong> from the vision encoder. <strong>B.</strong> A sparse
+                autoencoder processes <strong>z</strong> to
+                produce concept activations. The attention map from output text tokens to image tokens is applied
+                at the patch level to weight these activations. Latents exhibiting similar activation patterns across
+                output tokens are then clustered and visualized in a token-latent heatmap. <strong>C.</strong>
+                The causal influence
+                of these concepts on the model's output can be evaluated through latent ablation.
               </p>
             </div>
           </div>
@@ -471,33 +474,15 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="title is-3 has-text-centered">How does VisualScratchpad work?</h2>
-          <div class="columns is-centered has-text-centered">
-            <div class="column is-two-thirds">
-              <img src="static/images/method.png" alt="VisualScratchpad Method Overview"
-                style="width: 100%; max-width: 1000px; height: auto;" loading="lazy" />
-              <div class="content has-text-justified" style="margin-top: 2rem;">
-                <p>
-                  <strong> A.</strong> During inference in a vision-language model, we extract the intermediate
-                  representation
-                  <strong>z</strong> from the vision encoder. <strong>B.</strong> A sparse autoencoder processes
-                  <strong>z</strong> to produce concept
-                  activations. The attention map from output text tokens to image tokens is applied at the patch level
-                  to weight these activations. Latents exhibiting similar activation patterns across output tokens are
-                  then clustered and visualized in a token-latent heatmap.
-                  <strong>C.</strong> The causal influence of these concepts on the model's output can be evaluated
-                  through latent ablation.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="columns is-centered has-text-centered">
+          <div class="columns is-centered has--centered">
             <div class="column is-two-thirds">
               <img src="static/images/method2.png" alt="VisualScratchpad Method Overview"
                 style="width: 100%; max-width: 1000px; height: auto;" loading="lazy" />
               <div class="content has-text-justified" style="margin-top: 2rem;">
+                <strong>Attention-based concept re-ranking</strong>
                 <p>
-                  <strong>A.</strong> SAEs return latent activations for each image patch. <strong>B.</strong>
+                  <strong>A.</strong> SAEs return latent activations
+                  for each image patch. <strong>B.</strong>
                   Image-level activations
                   can be computed by naïvely averaging activations across all patches, or <strong>C.</strong> by
                   applying a
@@ -508,7 +493,50 @@
               </div>
             </div>
           </div>
+
+
+
+
+          <div class="columns is-centered has--centered">
+            <div class="column is-two-thirds">
+              <img src="static/images/token-latent.png" alt="VisualScratchpad Method Overview"
+                style="width: 100%; max-width: 1000px; height: auto;" loading="lazy" />
+              <div class="content has-text-justified" style="margin-top: 2rem;">
+                <strong>Token-Latent heatmap visualization and clustering </strong>
+                <p>
+                  Raw values are difficult to analyze, so we normalize in column-wise to show if the latent is
+                  specifically attended by certain tokens or by overall tokens. Moreover, we cluster and sort by
+                  activation correlation in column-wise, using hierarchical clustering.
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="columns is-centered has--centered">
+            <div class="column is-two-thirds">
+              <img src="static/images/concept_clusters.png" alt="VisualScratchpad Method Overview"
+                style="width: 100%; max-width: 1000px; height: auto;" loading="lazy" />
+              <img src="static/images/causal_inference.png" alt="VisualScratchpad Method Overview"
+                style="width: 100%; max-width: 1000px; height: auto;" loading="lazy" />
+              <div class="content has-text-justified" style="margin-top: 2rem;">
+                <strong>Causal inference</strong>
+                <p>
+                  Ablating latent clusters corresponding to distinct semantic topics removes those topics from the
+                  generated output, demonstrating their causal role in shaping the model's
+                  predictions.
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+
         </div>
+
+
+
+
       </div>
     </section>
 
